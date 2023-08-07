@@ -13,31 +13,49 @@
       </button>
     </div>
     <div v-show="showForm">
-      <form>
+      <vee-form :validation-schema="schema" :initial-values="song" @submit="edit">
+        <div>
+          <i v-show="edit_show_error">Error Editing</i>
+          <i v-show="edit_success">Edition Successful</i>
+        </div>
+
         <div class="mb-3">
           <label class="inline-block mb-2">Song Title</label>
-          <input
+          <vee-field
+            name="modified_name"
             type="text"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Enter Song Title"
           />
+          <ErrorMessage class="text-red-600" name="modified_name" />
         </div>
         <div class="mb-3">
           <label class="inline-block mb-2">Genre</label>
-          <input
+          <vee-field
+            name="genre"
             type="text"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Enter Genre"
           />
+          <ErrorMessage class="text-red-600" name="genre" />
         </div>
         <button type="submit" class="py-1.5 px-3 rounded text-white bg-green-600">Submit</button>
-        <button type="button" class="py-1.5 px-3 rounded text-white bg-gray-600">Go Back</button>
-      </form>
+        <button
+          type="button"
+          class="py-1.5 px-3 rounded text-white bg-gray-600"
+          @click.prevent="showForm = !showForm"
+        >
+          Go Back
+        </button>
+      </vee-form>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'pinia'
+//import useSongsStore from '@/stores/songs'
+
 export default {
   name: 'CompositionItem',
   props: {
@@ -48,8 +66,35 @@ export default {
   },
   data() {
     return {
-      showForm: false
+      showForm: false,
+      edit_show_error: false,
+      edit_success: false,
+      schema: {
+        modified_name: 'required',
+        genre: 'alpha_spaces'
+      }
     }
+  },
+  methods: {
+    // ...mapActions(useSongsStore, {
+    //   editSong: 'editSong'
+    // }),
+
+    edit() {
+      console.log('Song edited')
+    }
+
+    // async edit(values){
+    //     try {
+
+    //         await this.editSong(values, this.song.uid)
+    //     } catch (error) {
+    //         this.edit_show_error = true
+    //         return;
+    //     }
+
+    //     this.edit_success = true;
+    // }
   }
 }
 </script>
