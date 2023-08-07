@@ -14,9 +14,11 @@
           <div class="p-6">
             <!-- Composition Items -->
             <composition-item
-              v-for="song in songs"
+              v-for="(song, index) in songs"
               :key="song.docID"
               :song="song"
+              :updateSong="updateSong"
+              :index="index"
             ></composition-item>
           </div>
         </div>
@@ -57,6 +59,12 @@ export default {
       //store it into the songs array
       this.songs.push(song)
     })
+  },
+  methods: {
+    updateSong(index, values) {
+      this.songs[index].modified_name = values.modified_name
+      this.songs[index].genre = values.genre
+    }
   }
 
   //one way of cancelling the upload when the user navs out.
