@@ -19,6 +19,7 @@
               :song="song"
               :updateSong="updateSong"
               :index="index"
+              :removeSong="removeSong"
             ></composition-item>
           </div>
         </div>
@@ -64,6 +65,10 @@ export default {
     updateSong(index, values) {
       this.songs[index].modified_name = values.modified_name
       this.songs[index].genre = values.genre
+    },
+    removeSong(index) {
+      //splice will remove a song from the songs array
+      this.songs.splice(index, 1)
     }
   }
 
