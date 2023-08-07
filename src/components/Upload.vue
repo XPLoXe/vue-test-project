@@ -132,6 +132,13 @@ export default {
       console.log(files)
     }
   },
+  //another way of cancelling uploads when naving out.
+  cancelUplodas() {
+    this.uploads.forEach((upload) => {
+      upload.task.cancel()
+    })
+  },
+
   //cancel the upload before the component is unmounted
   //this is for the cases when we leave the page mid upload
   beforeUnmount() {

@@ -3,7 +3,7 @@
   <section class="container mx-auto mt-6">
     <div class="md:grid md:grid-cols-3 md:gap-4">
       <div class="col-span-1">
-        <app-upload></app-upload>
+        <app-upload ref="upload"></app-upload>
       </div>
       <div class="col-span-2">
         <div class="bg-white rounded border border-gray-200 relative flex flex-col">
@@ -110,6 +110,16 @@ export default {
   components: {
     AppUpload
   }
+
+  //one way of cancelling the upload when the user navs out.
+  //it's more flexible. Calling the child's method we have more control in the order of execution
+  // beforeRouteLeave(to, from, next) {
+  //   //$refs is a vue component
+  //   this.$refs.upload.cancelUploads()
+  //   next()
+  // }
+
+  //local guard:
   //   beforeRouteEnter(to, from, next) {
   //     const store = useUserStore()
   //     if (store.userLoggedIn) {
