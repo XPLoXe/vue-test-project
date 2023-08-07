@@ -54,18 +54,42 @@ export default {
     }
   },
   async created() {
-    //array of documents (songs)
-    const snapshots = await songsCollection.get()
+    this.getSongs()
 
-    snapshots.forEach((document) => {
-      this.songs.push({
-        //key.
-        docID: document.id,
-        //grab data in the document
-        //with spread operator to merge the properties into the object we're pushing into the array
-        ...document.data()
+    //this event is emitted whenever the user srolls
+    //when that happens, the function handleSCroll will be called
+    window.addEventListener('scroll', this.handleSCroll)
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleSCroll)
+  },
+  methods: {
+    handleSCroll() {
+      //scrollTop will be the pixels of the screen above
+      //offsetHeight will be the total pixels of the page
+      const { scrollTop, offsetHeight } = document.documentElement
+      //innerHeight will be the pixels that are being displayed in our screen
+      const { innerHeight } = window
+      const bottomOfWindow = Math.round(scrollTop) + innerHeight > offsetHeight - 100
+
+      if (bottomOfWindow) {
+        console.log('Bottom of window')
+      }
+    },
+    async getSongs() {
+      //array of documents (songs)
+      const snapshots = await songsCollection.get()
+
+      snapshots.forEach((document) => {
+        this.songs.push({
+          //key.
+          docID: document.id,
+          //grab data in the document
+          //with spread operator to merge the properties into the object we're pushing into the array
+          ...document.data()
+        })
       })
-    })
+    }
   }
 }
 </script>
