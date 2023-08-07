@@ -50,7 +50,9 @@ export default {
   },
   data() {
     return {
-      songs: []
+      songs: [],
+      maxPerPage: 3,
+      pendingRequest: false
     }
   },
   async created() {
@@ -73,12 +75,33 @@ export default {
       const bottomOfWindow = Math.round(scrollTop) + innerHeight > offsetHeight - 100
 
       if (bottomOfWindow) {
-        console.log('Bottom of window')
+        //when we reach the bottom of the page, we will get more songs
+        this.getSongs()
       }
     },
     async getSongs() {
-      //array of documents (songs)
-      const snapshots = await songsCollection.get()
+      //if the page is already loading songs, this method won't trigger
+      if (this.pendingRequest) {
+        return
+      }
+      this.pendingRequest = true
+
+      let snapshots
+      //if there's items in the array, it's safe to assume that we have a document object we can use in the query
+      if (this.songs.length) {
+        //the startAfter() requires that we pass an snapshot of document we should start from. so we're performing a query for it by calling the document function.
+        //we're passing the ID of the lasst object in this.songs array. So we'll get the snapshot of the last document in the array
+        const lastDoc = await songsCollection.doc(this.songs[this.songs.length - 1].docID).get()
+        //array of documents (songs) limited
+        snapshots = await songsCollection
+          .orderBy('modified_name')
+          .startAfter(lastDoc)
+          .limit(this.maxPerPage)
+          .get()
+      } else {
+        //this will get the first 3 songs
+        snapshots = await songsCollection.orderBy('modified_name').limit(this.maxPerPage).get()
+      }
 
       snapshots.forEach((document) => {
         this.songs.push({
@@ -89,6 +112,8 @@ export default {
           ...document.data()
         })
       })
+      //reset the pendingRequest so we can maka another one
+      this.pendingRequest = false
     }
   }
 }
