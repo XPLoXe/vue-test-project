@@ -20,6 +20,7 @@
               :updateSong="updateSong"
               :index="index"
               :removeSong="removeSong"
+              :updateUnsavedFlag="updateUnsavedFlag"
             ></composition-item>
           </div>
         </div>
@@ -43,7 +44,8 @@ export default {
 
   data() {
     return {
-      songs: []
+      songs: [],
+      unsavedFlag: false
     }
   },
 
@@ -72,6 +74,20 @@ export default {
       }
       //store it into the songs array
       this.songs.push(song)
+    },
+    //with this function we'll check if the user is filling a form
+    updateUnsavedFlag(value) {
+      this.unsavedFlag = value
+    }
+    //this method gives us the opportunity to stop the router from leaving the page
+  },
+  beforeRouteLeave(to, from, next) {
+    if (!this.unsavedFlag) {
+      next()
+    } else {
+      //the confirm function will create a prompt
+      const leave = confirm('You have unsaved changes, Are you sure you want to leave?')
+      next(leave)
     }
   }
 
