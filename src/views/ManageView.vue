@@ -104,11 +104,17 @@
 <script>
 //import useUserStore from '@/stores/user'
 import AppUpload from '@/components/Upload.vue'
+import { songsCollection, auth } from '@/includes/firebase'
 
 export default {
   name: 'manage-view',
   components: {
     AppUpload
+  },
+  async created() {
+    //the where() function help us filtering through the documents. (Documents are objects)
+    //it will check if the UID property is equal to the ID of the current user
+    const snapshot = await songsCollection.where('uid', '==', auth.currentUser.uid).get()
   }
 
   //one way of cancelling the upload when the user navs out.
