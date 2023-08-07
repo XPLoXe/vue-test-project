@@ -3,7 +3,7 @@
   <section class="container mx-auto mt-6">
     <div class="md:grid md:grid-cols-3 md:gap-4">
       <div class="col-span-1">
-        <app-upload ref="upload"></app-upload>
+        <app-upload ref="upload" :addSong="addSong"></app-upload>
       </div>
       <div class="col-span-2">
         <div class="bg-white rounded border border-gray-200 relative flex flex-col">
@@ -51,15 +51,7 @@ export default {
     //the where() function help us filtering through the documents. (Documents are objects)
     //it will check if the UID property is equal to the ID of the current user
     const snapshot = await songsCollection.where('uid', '==', auth.currentUser.uid).get()
-    snapshot.forEach((document) => {
-      //extract the data from the snapshot
-      const song = {
-        ...document.data(),
-        docID: document.id
-      }
-      //store it into the songs array
-      this.songs.push(song)
-    })
+    snapshot.forEach(this.addSong)
   },
   methods: {
     updateSong(index, values) {
@@ -69,6 +61,17 @@ export default {
     removeSong(index) {
       //splice will remove a song from the songs array
       this.songs.splice(index, 1)
+    },
+
+    //this function will be passed to the Upload Component
+    addSong(document) {
+      //extract the data from the snapshot
+      const song = {
+        ...document.data(),
+        docID: document.id
+      }
+      //store it into the songs array
+      this.songs.push(song)
     }
   }
 

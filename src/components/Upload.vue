@@ -53,6 +53,11 @@ export default {
       uploads: []
     }
   },
+  props: {
+    addSong: {
+      type: Function
+    }
+  },
   methods: {
     upload($event) {
       this.is_dragover = false
@@ -121,7 +126,12 @@ export default {
             //function that will return the public URL
             //we'll add that in a new property of song (with song.url)
             song.url = await task.snapshot.ref.getDownloadURL()
-            await songsCollection.add(song)
+
+            //this will return a document reference not a snapshot
+            const songRef = await songsCollection.add(song)
+            const songSnapshot = await songRef.get()
+
+            this.addSong(songSnapshot)
             //msg in case of success
             this.uploads[uploadIndex].variant = 'bg-green-400'
             this.uploads[uploadIndex].icon = 'fas fa-check' //awesome icon
