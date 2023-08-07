@@ -111,10 +111,27 @@ export default {
   components: {
     AppUpload
   },
+
+  data() {
+    return {
+      songs: []
+    }
+  },
+
   async created() {
     //the where() function help us filtering through the documents. (Documents are objects)
     //it will check if the UID property is equal to the ID of the current user
     const snapshot = await songsCollection.where('uid', '==', auth.currentUser.uid).get()
+
+    snapshot.forEach((document) => {
+      //extract the data from the snapshot
+      const song = {
+        ...document.data(),
+        docID: document.id
+      }
+      //store it into the songs array
+      this.songs.push(song)
+    })
   }
 
   //one way of cancelling the upload when the user navs out.
