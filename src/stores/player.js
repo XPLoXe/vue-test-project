@@ -2,13 +2,15 @@ import { defineStore } from 'pinia'
 //the Howl object will be used to create a new audio object. we'll use it to load the audio file and control it
 import { Howl } from 'howler'
 //howler will be accessible throughout the application thanks to being in this state
+import helper from '@/includes/helper'
 
 export default defineStore('player', {
   state: () => ({
     current_song: {},
     sound: {},
     seek: '00:00', //current position
-    duration: '00:00'
+    duration: '00:00',
+    playerProgress: '0%'
   }),
   actions: {
     async newSong(song) {
@@ -45,8 +47,9 @@ export default defineStore('player', {
       }
     },
     progress() {
-      this.seek = this.sound.seek()
-      this.duration = this.sound.duration()
+      this.seek = helper.formatTime(this.sound.seek())
+      this.duration = helper.formatTime(this.sound.duration())
+      this.playerProgress = `${(this.sound.seek() / this.sound.duration()) * 100}%`
 
       //check if the sound is playing
       if (this.sound.playing()) {
