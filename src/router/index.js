@@ -7,7 +7,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/HomeView.vue'
 import About from '@/views/AboutView.vue'
 import Manage from '@/views/ManageView.vue'
-import Song from '@views/SongView.vue'
+import Song from '@/views/SongView.vue'
 import useUserStore from '@/stores/user'
 
 //whenever a user visits this patch, the view router will render this
@@ -50,7 +50,8 @@ const routes = [
   },
   {
     name: 'song',
-    path: 'song/:id',
+    //the colon will tell that the segment will be dynamic
+    path: '/song/:id',
     component: Song
   },
   {
