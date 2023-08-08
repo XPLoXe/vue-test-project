@@ -29,6 +29,13 @@
         <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
       </div>
       <div class="p-6">
+        <div
+          class="text-white text-center font-bold p-4 mb-4"
+          v-if="comment_show_alert"
+          :class="comment_alert_variant"
+        >
+          {{ comment_alert_msg }}
+        </div>
         <vee-form :validation-schema="schema" @submit="addComment">
           <vee-field
             name="comment"
@@ -100,7 +107,11 @@ export default {
     this.song = docSnapshot.data()
   },
   methods: {
-    async addComment() {
+    async addComment(values) {
+      this.comment_in_submission = true
+      this.comment_show_alert = true
+      this.comment_alert_variant = 'bg-blue-500'
+      this.comment_alert_msg = 'Please wait! Your comment is being posted'
       console.log('commented')
     }
   }
