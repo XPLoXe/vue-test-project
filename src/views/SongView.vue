@@ -136,6 +136,11 @@ export default {
       return
     }
 
+    //the route object will contain informnation from the current route
+    const { sort } = this.$route.query
+
+    this.sort = sort === '1' || sort === '2' ? sort : '1'
+
     this.song = docSnapshot.data()
     this.getComments()
   },
@@ -187,7 +192,12 @@ export default {
   //A watcher is a function that tracks changes of properties in the components
   watch: {
     sort(newVal) {
+      if (newVal === this.$route.query.sort) {
+        //this will prevent the watcher from updating the route if the query parameter already matches the sort value
+        return
+      }
       //we can use the push() to add query parameters in the URL
+      //the router object is a general object for interacting with the router in the application
       this.$router.push({
         //the queries use key:value
         query: {
