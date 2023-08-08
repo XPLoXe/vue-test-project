@@ -140,6 +140,8 @@ export default {
       //store the comment in the database
       await commentsCollection.add(comment)
 
+      this.getComments()
+
       this.comment_in_submission = false
       this.comment_alert_variant = 'bg-green-500'
       this.comment_alert_msg = 'Comment added!'
@@ -147,6 +149,7 @@ export default {
       //this method will reset qhe comment form
       resetForm()
     },
+
     async getComments() {
       const snapshots = await commentsCollection.where('sid', '==', this.$route.params.id).get()
 
