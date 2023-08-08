@@ -29,7 +29,7 @@
         <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
       </div>
       <div class="p-6">
-        <vee-form :validation-schema="schema" @submit="comment">
+        <vee-form :validation-schema="schema" @submit="addComment">
           <vee-field
             name="comment"
             as="textarea"
@@ -100,7 +100,7 @@ export default {
     this.song = docSnapshot.data()
   },
   methods: {
-    async comment() {
+    async addComment() {
       console.log('commented')
     }
   }
