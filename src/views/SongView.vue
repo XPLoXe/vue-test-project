@@ -29,15 +29,22 @@
         <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
       </div>
       <div class="p-6">
-        <form>
-          <textarea
+        <vee-form :validation-schema="schema" @submit="comment">
+          <vee-field
+            name="comment"
+            as="textarea"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded mb-4"
             placeholder="Your comment here..."
-          ></textarea>
-          <button type="submit" class="py-1.5 px-3 rounded text-white bg-green-600 block">
+          ></vee-field>
+          <ErrorMessage class="text-red-600" name="comment" />
+          <button
+            type="submit"
+            class="py-1.5 px-3 rounded text-white bg-green-600 block"
+            :disabled="comment_in_submission"
+          >
             Submit
           </button>
-        </form>
+        </vee-form>
         <!-- Sort Comments -->
         <select
           class="block mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
@@ -62,66 +69,6 @@
         laudantium.
       </p>
     </li>
-    <li class="p-6 bg-gray-50 border border-gray-200">
-      <!-- Comment Author -->
-      <div class="mb-5">
-        <div class="font-bold">Elaine Dreyfuss</div>
-        <time>5 mins ago</time>
-      </div>
-
-      <p>
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium der doloremque
-        laudantium.
-      </p>
-    </li>
-    <li class="p-6 bg-gray-50 border border-gray-200">
-      <!-- Comment Author -->
-      <div class="mb-5">
-        <div class="font-bold">Elaine Dreyfuss</div>
-        <time>5 mins ago</time>
-      </div>
-
-      <p>
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium der doloremque
-        laudantium.
-      </p>
-    </li>
-    <li class="p-6 bg-gray-50 border border-gray-200">
-      <!-- Comment Author -->
-      <div class="mb-5">
-        <div class="font-bold">Elaine Dreyfuss</div>
-        <time>5 mins ago</time>
-      </div>
-
-      <p>
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium der doloremque
-        laudantium.
-      </p>
-    </li>
-    <li class="p-6 bg-gray-50 border border-gray-200">
-      <!-- Comment Author -->
-      <div class="mb-5">
-        <div class="font-bold">Elaine Dreyfuss</div>
-        <time>5 mins ago</time>
-      </div>
-
-      <p>
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium der doloremque
-        laudantium.
-      </p>
-    </li>
-    <li class="p-6 bg-gray-50 border border-gray-200">
-      <!-- Comment Author -->
-      <div class="mb-5">
-        <div class="font-bold">Elaine Dreyfuss</div>
-        <time>5 mins ago</time>
-      </div>
-
-      <p>
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium der doloremque
-        laudantium.
-      </p>
-    </li>
   </ul>
 </template>
 
@@ -132,7 +79,14 @@ export default {
   name: 'SongView',
   data() {
     return {
-      song: {}
+      song: {},
+      schema: {
+        comment: 'required|min:4|max:140|alpha_spaces'
+      },
+      comment_in_submission: false,
+      comment_show_alert: false,
+      comment_alert_variant: 'bg-blue-500',
+      comment_alert_msg: 'Please wait! Your comment is being posted'
     }
   },
   async created() {
@@ -144,6 +98,11 @@ export default {
     }
 
     this.song = docSnapshot.data()
+  },
+  methods: {
+    async comment() {
+      console.log('commented')
+    }
   }
 }
 </script>
