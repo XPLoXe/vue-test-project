@@ -6,7 +6,9 @@ import { Howl } from 'howler'
 export default defineStore('player', {
   state: () => ({
     current_song: {},
-    sound: {}
+    sound: {},
+    seek: '00:00', //current position
+    duration: '00:00'
   }),
   actions: {
     async newSong(song) {
@@ -18,6 +20,13 @@ export default defineStore('player', {
       })
 
       this.sound.play()
+
+      this.sound.on('play', () => {
+        //this will execute a function passed into it.
+        //it's similar to the set interval function, except the function gets called before the next frame gets painted onto the screen.
+        //it's perfect for updating the duration and seek state properties.
+        requestAnimationFrame(this.progress)
+      })
     },
     async toggleAudio() {
       //this will check if the function exists on the object
@@ -33,6 +42,15 @@ export default defineStore('player', {
       } else {
         //if not, it will be played
         this.sound.play()
+      }
+    },
+    progress() {
+      this.seek = this.sound.seek()
+      this.duration = this.sound.duration()
+
+      //check if the sound is playing
+      if (this.sound.playing()) {
+        requestAnimationFrame(this.progress)
       }
     }
   },
