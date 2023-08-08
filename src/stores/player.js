@@ -60,6 +60,26 @@ export default defineStore('player', {
       if (this.sound.playing()) {
         requestAnimationFrame(this.progress)
       }
+    },
+    updateSeek(event) {
+      //there has to be a song playing
+      if (!this.sound.playing) {
+        return
+      }
+
+      //this will return the information about the current elements, coordinates and dimentions
+      const { x, width } = event.currentTarget.getBoundingClientRect()
+      //this will represent the X coordinate of the click relative to the document
+      const clickX = event.clientX - x
+      const percentage = clickX / width
+      const seconds = this.sound.duration() * percentage
+      this.sound.seek(seconds)
+      //the function will temporaly pause the audio.
+      //the once function will listen for an even, if the event is emitted, it'll run the callback function passed into it
+      //this callback function will only run once
+
+      //this.sound.once('seek', this.progress) //this doesn't work
+      this.sound.on('seek', () => requestAnimationFrame(this.progress)) //internet answer
     }
   },
   getters: {
