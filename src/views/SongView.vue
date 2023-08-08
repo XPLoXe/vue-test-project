@@ -36,7 +36,7 @@
         >
           {{ comment_alert_msg }}
         </div>
-        <vee-form :validation-schema="schema" @submit="addComment">
+        <vee-form :validation-schema="schema" @submit="addComment" v-if="userLoggedIn">
           <vee-field
             name="comment"
             as="textarea"
@@ -80,7 +80,9 @@
 </template>
 
 <script>
-import { songsCollection } from '@/includes/firebase'
+import { songsCollection, auth, commentsCollection } from '@/includes/firebase'
+import { mapState } from 'pinia'
+import useUserStore from '@/stores/user'
 
 export default {
   name: 'SongView',
@@ -96,6 +98,11 @@ export default {
       comment_alert_msg: 'Please wait! Your comment is being posted'
     }
   },
+  computed: {
+    //this functionaccepts an array of state properties we'd like to map
+    //we'll map the userLoggedIn state property for verifying if the user is logged in
+    ...mapState(useUserStore, ['userLoggedIn'])
+  },
   async created() {
     const docSnapshot = await songsCollection.doc(this.$route.params.id).get()
 
@@ -107,12 +114,33 @@ export default {
     this.song = docSnapshot.data()
   },
   methods: {
-    async addComment(values) {
+    async addComment(values, { resetForm }) {
+      // the context object contains methods andd properties about our form. we can use it to resen the form
       this.comment_in_submission = true
       this.comment_show_alert = true
       this.comment_alert_variant = 'bg-blue-500'
       this.comment_alert_msg = 'Please wait! Your comment is being posted'
       console.log('commented')
+
+      const comment = {
+        content: values.comment,
+        datePosted: new Date().toString(),
+        //this will help us bind the song with the comment
+        sid: this.$route.params.id,
+        //get the name of the user
+        name: auth.currentUser.displayName,
+        uid: auth.currentUser.uid
+      }
+
+      //store the comment in the database
+      await commentsCollection.add(comment)
+
+      this.comment_in_submission = false
+      this.comment_alert_variant = 'bg-green-500'
+      this.comment_alert_msg = 'Comment added!'
+
+      //this method will reset qhe comment form
+      resetForm()
     }
   }
 }
