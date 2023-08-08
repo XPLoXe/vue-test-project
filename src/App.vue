@@ -3,7 +3,15 @@
 
   <!--router is a global component.
   It was defined when we registered the Vue Router module as a plug in-->
-  <router-view></router-view>
+  <router-view v-slot="{ Component, route }">
+    <transition name="fade" mode="out-in">
+      <div :key="route.name">
+        <!--we use the component just to load and render components dynamically
+        It will render whatever component is provided by the router view component-->
+        <component :is="Component"></component>
+      </div>
+    </transition>
+  </router-view>
 
   <!-- Player -->
 
@@ -41,3 +49,18 @@ export default {
   }
 }
 </script>
+
+<style>
+.fade-enter-from {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  transition: all 0.5s linear;
+}
+
+.fade-leave-to {
+  transition: all 0.5 linear;
+  opacity: 0;
+}
+</style>
