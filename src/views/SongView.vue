@@ -170,7 +170,6 @@ export default {
       //this method will reset qhe comment form
       resetForm()
     },
-
     async getComments() {
       const snapshots = await commentsCollection.where('sid', '==', this.$route.params.id).get()
 
@@ -182,6 +181,18 @@ export default {
           docID: doc.id,
           ...doc.data()
         })
+      })
+    }
+  },
+  //A watcher is a function that tracks changes of properties in the components
+  watch: {
+    sort(newVal) {
+      //we can use the push() to add query parameters in the URL
+      this.$router.push({
+        //the queries use key:value
+        query: {
+          sort: newVal
+        }
       })
     }
   }
