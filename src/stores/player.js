@@ -10,7 +10,7 @@ export default defineStore('player', {
     sound: {},
     seek: '00:00', //current position
     duration: '00:00',
-    playerProgress: '0%'
+    playerProgress: '0%' //the width and lenght will accept the % unit
   }),
   actions: {
     async newSong(song) {
