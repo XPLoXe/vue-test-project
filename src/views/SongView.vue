@@ -54,6 +54,7 @@
         </vee-form>
         <!-- Sort Comments -->
         <select
+          v-model="sort"
           class="block mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
         >
           <option value="1">Latest</option>
@@ -66,7 +67,7 @@
   <ul class="container mx-auto">
     <li
       class="p-6 bg-gray-50 border border-gray-200"
-      v-for="comment in comments"
+      v-for="comment in sortedComments"
       :key="comment.docID"
     >
       <!-- Comment Author -->
@@ -99,13 +100,33 @@ export default {
       comment_show_alert: false,
       comment_alert_variant: 'bg-blue-500',
       comment_alert_msg: 'Please wait! Your comment is being posted',
-      comments: []
+      comments: [],
+      sort: '1' //1: latest to oldest. 2: oldest to latest
     }
   },
   computed: {
     //this functionaccepts an array of state properties we'd like to map
     //we'll map the userLoggedIn state property for verifying if the user is logged in
-    ...mapState(useUserStore, ['userLoggedIn'])
+    ...mapState(useUserStore, ['userLoggedIn']),
+    sortedComments() {
+      //The slice method returns a brand new array based on the old array, you can use it to extrac specific items in the array
+      //the slice method will return a new array
+      //whereas the sort() will directly affect the array it's called on
+      //ESLint won't let us do it directly with the sort() because it will affect the array directly and computed properties aren't supposed to do that
+      return this.comments.slice().sort((a, b) => {
+        //descending order
+        if (this.sort === '1') {
+          //the date has to be converted to a string for a storage and the nconverted back to a date
+          //the sort function works by sortin the objects based on the value returns
+          //If the value return as positive, then A will come first in the array
+          //If 0 is return, the nA and B will stay in their respective index
+          //If it's positive, it will tell JavaScript to put B first in the Array
+          return new Date(b.datePosted) - new Date(a.datePosted)
+        }
+        //comments being sorting in ascending order
+        return new Date(a.datePosted) - new Date(b.datePosted)
+      })
+    }
   },
   async created() {
     const docSnapshot = await songsCollection.doc(this.$route.params.id).get()
