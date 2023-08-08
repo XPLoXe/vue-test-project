@@ -64,16 +64,19 @@
   </section>
   <!-- Comments -->
   <ul class="container mx-auto">
-    <li class="p-6 bg-gray-50 border border-gray-200">
+    <li
+      class="p-6 bg-gray-50 border border-gray-200"
+      v-for="comment in comments"
+      :key="comment.docID"
+    >
       <!-- Comment Author -->
       <div class="mb-5">
-        <div class="font-bold">Elaine Dreyfuss</div>
-        <time>5 mins ago</time>
+        <div class="font-bold">{{ comment.name }}</div>
+        <time>{{ comment.datePosted }}</time>
       </div>
 
       <p>
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium der doloremque
-        laudantium.
+        {{ comment.content }}
       </p>
     </li>
   </ul>
@@ -90,12 +93,13 @@ export default {
     return {
       song: {},
       schema: {
-        comment: 'required|min:4|max:140|alpha_spaces'
+        comment: 'required|min:4|max:140'
       },
       comment_in_submission: false,
       comment_show_alert: false,
       comment_alert_variant: 'bg-blue-500',
-      comment_alert_msg: 'Please wait! Your comment is being posted'
+      comment_alert_msg: 'Please wait! Your comment is being posted',
+      comments: []
     }
   },
   computed: {
@@ -112,6 +116,7 @@ export default {
     }
 
     this.song = docSnapshot.data()
+    this.getComments()
   },
   methods: {
     async addComment(values, { resetForm }) {
@@ -141,6 +146,19 @@ export default {
 
       //this method will reset qhe comment form
       resetForm()
+    },
+    async getComments() {
+      const snapshots = await commentsCollection.where('sid', '==', this.$route.params.id).get()
+
+      //reset the array. to make sure we don't have duplicate comments
+      this.comments = []
+
+      snapshots.forEach((doc) => {
+        this.comments.push({
+          docID: doc.id,
+          ...doc.data()
+        })
+      })
     }
   }
 }
