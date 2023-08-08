@@ -14,6 +14,11 @@ export default defineStore('player', {
   }),
   actions: {
     async newSong(song) {
+      if (this.sound instanceof Howl) {
+        //this function will pause the current audio and delete the instance by removing it from memory
+        this.sound.unload()
+      }
+
       this.current_song = song
 
       this.sound = new Howl({
