@@ -11,11 +11,16 @@ import Icon from './directives/icon'
 import i18n from './includes/i18n'
 import { registerSW } from 'virtual:pwa-register'
 import GlobalComponents from './includes/_globals'
+import progressBar from './includes/progress-bar'
 
 import './assets/base.css'
 import './assets/main.css'
+import 'nprogress/nprogress.css'
 
 registerSW({ immediate: true })
+
+//this will make the router object accessible in the progress bar file
+progressBar(router)
 
 let app
 
