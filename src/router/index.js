@@ -4,11 +4,17 @@ import { createRouter, createWebHistory } from 'vue-router'
 //the @ symbol is used to point to the source directory.
 //This shortcut makes it easier to import the component
 //without having to guess where we are
-import Home from '@/views/HomeView.vue'
-import About from '@/views/AboutView.vue'
-import Manage from '@/views/ManageView.vue'
-import Song from '@/views/SongView.vue'
+
+//import About from '@/views/AboutView.vue'
+//import Manage from '@/views/ManageView.vue'
+//import Song from '@/views/SongView.vue'
 import useUserStore from '@/stores/user'
+
+//import Home from '@/views/HomeView.vue'
+const Home = () => import('@/views/HomeView.vue')
+const About = () => import('@/views/AboutView.vue')
+const Manage = () => import('@/views/ManageView.vue')
+const Song = () => import('@/views/SongView.vue')
 
 //whenever a user visits this patch, the view router will render this
 //component onto the page
