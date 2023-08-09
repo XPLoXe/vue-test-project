@@ -8,6 +8,7 @@ import router from './router'
 import VeeValidatePlugin from './includes/validation'
 import { auth } from './includes/firebase'
 import Icon from './directives/icon'
+import i18n from './includes/i18n'
 
 import './assets/base.css'
 import './assets/main.css'
@@ -25,6 +26,7 @@ auth.onAuthStateChanged(() => {
     app.use(createPinia())
     app.use(router)
     app.use(VeeValidatePlugin)
+    app.use(i18n)
     //register directive
     app.directive('icon', Icon)
 
