@@ -93,7 +93,7 @@
 import { songsCollection, auth, commentsCollection } from '@/includes/firebase'
 import { mapState, mapActions } from 'pinia'
 import useUserStore from '@/stores/user'
-import usePlayerStore from '@/stores/Player'
+import usePlayerStore from '@/stores/player'
 
 export default {
   name: 'SongView',
