@@ -1,5 +1,8 @@
-import _ from 'lodash'
+//importing the whole object is too performance consuming, that's why we should only evoke what we need
+//import _ from 'lodash'
 //https://lodash.com/
+import upperFirst from 'lodash/upperFirst'
+import camelCase from 'lodash/camelCase'
 
 export default {
   install(app) {
@@ -23,8 +26,8 @@ export default {
       //since we need it in pascal case, we need both.
       //the split() will break the string into an array
       //the pop() will grab the last item
-      const componentName = _.upperFirst(
-        _.camelCase(
+      const componentName = upperFirst(
+        camelCase(
           path
             .split('/')
             .pop()
