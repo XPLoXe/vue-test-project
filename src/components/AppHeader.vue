@@ -40,6 +40,13 @@
             </li>
           </template>
         </ul>
+        <ul class="ml-auto">
+          <li>
+            <a class="px-2 text-white" href="#" @click.prevent="changeLocale">
+              {{ currentLocale }}
+            </a>
+          </li>
+        </ul>
       </div>
     </nav>
   </header>
@@ -56,7 +63,10 @@ export default {
   computed: {
     //the useUserStore is the one in charge to access the DB and tell if the user is logged or not
     //spread operator
-    ...mapStores(useModalStore, useUserStore)
+    ...mapStores(useModalStore, useUserStore),
+    currentLocale() {
+      return this.$i18n.locale === 'es' ? 'Spanish' : 'English'
+    }
   },
   methods: {
     toggleAuthModal() {
@@ -73,6 +83,9 @@ export default {
       if (this.$route.meta.requiresAuth) {
         this.$router.push({ name: 'home' })
       }
+    },
+    changeLocale() {
+      this.$i18n.locale = this.$i18n.locale === 'es' ? 'en' : 'es'
     }
   }
 }
