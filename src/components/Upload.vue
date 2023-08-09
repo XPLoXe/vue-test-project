@@ -76,6 +76,20 @@ export default {
           //this will end the current iteration of the loop
           return
         }
+
+        //check if the user is online
+        if (!navigator.onLine) {
+          this.uploads.push({
+            task: {},
+            current_progress: 100,
+            name: file.name,
+            variant: 'bg-red-400',
+            icon: 'fas fa-times',
+            text_class: 'text-red-400'
+          })
+          return
+        }
+
         //this represents the path to the bucket URL
         //firebase will now know where to upload the file.
         const storageRef = storage.ref()
