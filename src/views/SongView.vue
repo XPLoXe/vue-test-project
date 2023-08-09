@@ -135,21 +135,48 @@ export default {
       })
     }
   },
-  async created() {
-    const docSnapshot = await songsCollection.doc(this.$route.params.id).get()
 
-    if (!docSnapshot.exists) {
-      this.$router.push({ name: 'home' })
-      return
-    }
+  //BEFORE PERFORMANCE TWEEK:
+  // async created() {
+  //   const docSnapshot = await songsCollection.doc(this.$route.params.id).get()
 
-    //the route object will contain informnation from the current route
-    const { sort } = this.$route.query
+  //   if (!docSnapshot.exists) {
+  //     this.$router.push({ name: 'home' })
+  //     return
+  //   }
 
-    this.sort = sort === '1' || sort === '2' ? sort : '1'
+  //   //the route object will contain informnation from the current route
+  //   const { sort } = this.$route.query
 
-    this.song = docSnapshot.data()
-    this.getComments()
+  //   this.sort = sort === '1' || sort === '2' ? sort : '1'
+
+  //   this.song = docSnapshot.data()
+  //   this.getComments()
+  // },
+  //
+
+  //AFTER PERFORMANCE TWEEK:
+  async beforeRouteEnter(to, from, next) {
+    //the changes made in this function are with the purpose of making the perceived performance faster.
+    //the contect will now load with the component.
+    const docSnapshot = await songsCollection.doc(to.params.id).get()
+
+    //the parameter of the next function is a callback function to run after the component has been loaded
+    //we can access the components data via the VM parameter. it's a context to the component. We can treat it like 'this' keyword
+    next((vm) => {
+      if (!docSnapshot.exists) {
+        vm.$router.push({ name: 'home' })
+        return
+      }
+
+      //the route object will contain informnation from the current route
+      const { sort } = vm.$route.query
+
+      vm.sort = sort === '1' || sort === '2' ? sort : '1'
+
+      vm.song = docSnapshot.data()
+      vm.getComments()
+    })
   },
   methods: {
     ...mapActions(usePlayerStore, ['newSong']),
