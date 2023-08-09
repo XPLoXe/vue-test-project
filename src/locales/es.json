@@ -1,3 +1,6 @@
 {
-  "home": { "listen": "¡Escucha buena música!" }
+  "home": { "listen": "¡Escucha buena música!" },
+  "manage": {
+    "my_songs": "Mis Canciones"
+  }
 }
