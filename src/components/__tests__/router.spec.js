@@ -1,6 +1,5 @@
 import { shallowMount, RouterLinkStub } from '@vue/test-utils'
 import SongItem from '@/components/SongItem.vue'
-import { expect, test } from 'vitest'
 
 describe('Router', () => {
   test('renders router link', () => {
