@@ -2,5 +2,11 @@
   "home": { "listen": "¡Escucha buena música!" },
   "manage": {
     "my_songs": "Mis Canciones"
+  },
+  "song": {
+    "comment_count": "Sin comentarios | 1 comentario | {count} comentarios"
+  },
+  "comments": {
+    "length": "Sin comentarios | 1 comentario | {count} comentarios"
   }
 }

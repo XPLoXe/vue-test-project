@@ -9,5 +9,8 @@
   },
   "manage": {
     "my_songs": "My Songs"
+  },
+  "comments": {
+    "length": "No comments | 1 comment | {count} comments"
   }
 }
